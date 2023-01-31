@@ -15,33 +15,26 @@ const Schema = new mongoose.Schema({
         type:String,
         required:true,
      },
+
      date:{
-        type:Date,
+        type:String,
         required:true,
         default:null
       
      },
-     Time:{
-       type:String,
-       required:true,
-       default:null
-       
-     },
-     
+    
      Task : {
         type:String ,
         required:true
      },
-     userId:{
-        
-        type:ObjectId,
-        ref:"Signup"
-     },
-    
 
+     UserId : {
+
+         type:ObjectId,
+         ref:"Signup"
+     }
     
-},
-   {timestamps:true}
+   }
 );
 
 const usermodels = mongoose.model("user",Schema);

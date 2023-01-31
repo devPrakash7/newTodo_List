@@ -29,9 +29,6 @@ const createUser = [
     check("Title").notEmpty().isString().trim().isIn(validTitle).withMessage("please Enter Valid title"),
     check("Desc").notEmpty().isString().trim(),
     check("Task").notEmpty().isString().trim(),
-    check("date").notEmpty().isString().trim().isDate(),
-    check("Time").notEmpty().isString().trim(),
-    check("userId").notEmpty().isString().isAlphanumeric().trim(),
 
 ]
 

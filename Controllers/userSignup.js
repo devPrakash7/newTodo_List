@@ -1,6 +1,7 @@
 
 const userModel = require("../Models/userSignup");
 const bcrypt = require("bcrypt");
+const { remove } = require("../Models/userSignup");
 
 
  const Signup = async (req,res) => {
@@ -22,7 +23,9 @@ const bcrypt = require("bcrypt");
 
     const saltRound = 10;
     reqBody.password = await bcrypt.hash(password , saltRound);
+
     const user = await userModel.create(reqBody);
+     user.password = null
     return res.status(201).send({data:user});
     
   }catch(err){

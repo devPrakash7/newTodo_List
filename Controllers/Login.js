@@ -32,8 +32,6 @@ const Login = async(req,res) => {
             },
             'prakash123'
         );
-        
-        res.header("x-api-key", token);
 
         res.status(200).send({ status: true, message: 'Success', userId: { userId, token } });
 

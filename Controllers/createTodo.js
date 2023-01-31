@@ -2,6 +2,8 @@
 const Models = require("../Models/userModels");
 const moment = require("moment");
 const userModel = require("../Models/userSignup");
+const jwt = require("jsonwebtoken");
+const { search } = require("../Routes/rout");
 
 
 
@@ -10,48 +12,47 @@ const createUser = async (req,res) => {
  try{
 
     const reqBody = req.body;
-    const tokenId = req.userId;
-    console.log(tokenId);
-    
-    let {Title , Desc, Task, Time , date, userId} = reqBody;
-    console.log(userId);
+    const tokenId = req.headers.authorization;
+    const token = tokenId.substring("Bearer ".length);
+     
+    let object;
 
-    if(userId !== tokenId){
-    
-      return res.status(400).send({
-        status: false,
-        message: 'Unauthorised Access. Please login again!',
-      });
-    }
+    if (!token) {
+      throw new Error("Authorization token is required");
+    } 
+   jwt.verify(token, "prakash123", function (err, decoded) {
+      if (err) {
+        throw new Error("Error : " + err);
+      }
+       object = decoded;
+    });
 
-    const SearchId = await userModel.findById(userId);
-    
+  let NewuserId = object.userId;
+  
+    let {Title , Desc, Task, UserId} = reqBody;
+  
+    const SearchId = await userModel.findById(NewuserId);
+  
     if (!SearchId) {
       return res
         .status(400)
         .send({ status: false, message: `user does not exists.` });
     }
-
-
-    let currDate = moment().toDate();
-    let currentDate = new Date()
-    let time = currentDate.getHours() + ":" + currentDate.getMinutes() + ":" + currentDate.getSeconds();
     
-
-
+    
+    const currentDate = moment().format('X');
+  
     const obj = {
 
         Title,
         Desc,
         Task,
-        userId,
-        date:currDate,             
-        Time:time
-        
+        UserId:NewuserId,
+        date: currentDate
+
     }
-  
+    
       const newuser = await Models.create(obj);
-      console.log(newuser)
       
       return res.status(201).send({
         status: true,
